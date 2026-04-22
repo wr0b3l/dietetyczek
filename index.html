@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Żywieniowy — Lukasz & Joanna</title>
+<style>
+  :root {
+    --lukasz: #1e3a5f;
+    --lukasz-2: #2d5f8f;
+    --lukasz-light: #eaf0f7;
+    --joanna: #7a2d52;
+    --joanna-2: #b54a7f;
+    --joanna-light: #f7e8ef;
+    --accent: #e8a83e;
+    --accent-light: #fff9ed;
+    --text: #2a2a2a;
+    --muted: #666;
+    --border: #d8dce5;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* === HERO === */
+  .hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5f8f 60%, #3a7bb5 100%);
+    color: white;
+    padding: 80px 20px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero .kicker {
+    font-size: 13px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    margin: 0 0 16px 0;
+    font-weight: 700;
+    line-height: 1.05;
+  }
+
+  .hero .subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    opacity: 0.9;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  .hero-people {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    max-width: 720px;
+  }
+
+  .hero-person {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 20px 24px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+  }
+
+  .hero-person .name {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .hero-person .stats {
+    font-size: 14px;
+    opacity: 0.95;
+    line-height: 1.7;
+  }
+
+  /* === NAV === */
+  .nav {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 12px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    overflow-x: auto;
+  }
+
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+
+  .nav a:hover {
+    background: var(--bg);
+    color: var(--lukasz);
+  }
+
+  /* === SECTIONS === */
+  section {
+    padding: 60px 0 20px;
+  }
+
+  section h2 {
+    font-size: 32px;
+    color: var(--lukasz);
+    border-bottom: 3px solid var(--lukasz);
+    padding-bottom: 12px;
+    margin: 0 0 30px 0;
+    display: inline-block;
+  }
+
+  h3.subsection {
+    font-size: 22px;
+    color: var(--lukasz-2);
+    margin: 40px 0 16px;
+  }
+
+  h4.meal-slot {
+    font-size: 14px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 30px 0 10px;
+  }
+
+  p { margin: 0 0 16px 0; }
+
+  /* === PERSON HEADERS === */
+  .person-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 28px;
+    border-radius: 12px;
+    margin: 30px 0 20px;
+    color: white;
+  }
+
+  .person-header.lukasz {
+    background: linear-gradient(90deg, var(--lukasz), var(--lukasz-2));
+  }
+
+  .person-header.joanna {
+    background: linear-gradient(90deg, var(--joanna), var(--joanna-2));
+  }
+
+  .person-header .avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .person-header h3 {
+    font-size: 24px;
+    margin: 0 0 4px 0;
+  }
+
+  .person-header .macros {
+    font-size: 14px;
+    opacity: 0.95;
+  }
+
+  /* === MEAL GRID === */
+  .meal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .meal-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    background: var(--card-bg);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .meal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  }
+
+  .meal-card .card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--lukasz);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e4ec;
+  }
+
+  .meal-card .ingredients ul {
+    margin: 0 0 8px 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: #444;
+  }
+
+  .meal-card .ingredients li {
+    padding: 2px 0 2px 14px;
+    position: relative;
+  }
+
+  .meal-card .ingredients li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--lukasz-2);
+    font-weight: bold;
+  }
+
+  .meal-card .ingredients .person-tag {
+    display: block;
+    font-weight: 600;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+  }
+
+  .meal-card .ingredients .person-tag.lukasz { color: var(--lukasz); }
+  .meal-card .ingredients .person-tag.joanna { color: var(--joanna); }
+
+  .meal-card .macro-footer {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed #d0d4dc;
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .meal-card .macro-footer .kcal {
+    font-weight: 700;
+    color: var(--lukasz);
+  }
+
+  .meal-card .macro-footer .kcal.joanna {
+    color: var(--joanna);
+  }
+
+  /* === PLAN TABLE === */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+
+  table.plan-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background: white;
+  }
+
+  .plan-table th {
+    background: var(--lukasz);
+    color: white;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .plan-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e0e4ec;
+    vertical-align: top;
+  }
+
+  .plan-table tr:nth-child(even) td {
+    background: #fafbfc;
+  }
+
+  .plan-table .day-cell {
+    font-weight: 700;
+    color: var(--lukasz);
+    white-space: nowrap;
+  }
+
+  .plan-table tr.weekend .day-cell {
+    color: var(--joanna);
+  }
+
+  /* === RECIPES === */
+  .recipe {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .recipe-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-bottom: 2px solid var(--lukasz);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .recipe-header h4 {
+    font-size: 20px;
+    color: var(--lukasz);
+    margin: 0;
+  }
+
+  .recipe-header .recipe-num {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    background: var(--bg);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  .recipe-portions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  .recipe-portions {
+    background: var(--bg);
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid;
+  }
+
+  .recipe-portions.lukasz { border-color: var(--lukasz); }
+  .recipe-portions.joanna { border-color: var(--joanna); }
+
+  .recipe-portions h5 {
+    font-size: 13px;
+    margin: 0 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #d0d4dc;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .recipe-portions.lukasz h5 { color: var(--lukasz); }
+  .recipe-portions.joanna h5 { color: var(--joanna); }
+
+  .recipe-portions ul {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    list-style: none;
+  }
+
+  .recipe-portions li {
+    padding: 3px 0;
+    border-bottom: 1px dotted #e0e4ec;
+  }
+
+  .recipe-portions li:last-child {
+    border-bottom: none;
+  }
+
+  .recipe-portions .macro-line {
+    margin-top: 8px !important;
+    padding-top: 8px !important;
+    font-weight: 600;
+    font-size: 12px;
+    border-top: 1px solid #c0c4cc !important;
+    border-bottom: none !important;
+    color: #444;
+  }
+
+  .recipe-steps {
+    margin-top: 18px;
+    background: var(--accent-light);
+    padding: 16px 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--accent);
+  }
+
+  .recipe-steps h5 {
+    font-size: 13px;
+    color: #8a6014;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .recipe-steps ol {
+    margin: 0;
+    padding-left: 22px;
+    font-size: 14px;
+  }
+
+  .recipe-steps li {
+    margin-bottom: 6px;
+    line-height: 1.55;
+  }
+
+  /* === SHOPPING === */
+  .shopping-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .shopping-category {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    background: white;
+  }
+
+  .shopping-category h5 {
+    font-size: 15px;
+    color: var(--lukasz);
+    margin: 0 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e4ec;
+  }
+
+  .shopping-category ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .shopping-category li {
+    padding: 5px 0 5px 24px;
+    position: relative;
+    border-bottom: 1px dotted #e0e4ec;
+  }
+
+  .shopping-category li:last-child {
+    border-bottom: none;
+  }
+
+  .shopping-category li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: var(--lukasz-2);
+    font-size: 16px;
+    line-height: 1;
+    top: 6px;
+  }
+
+  /* === SUPPLEMENTS === */
+  .supp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+  }
+
+  .supp-card {
+    border-radius: 12px;
+    padding: 24px 28px;
+  }
+
+  .supp-card.lukasz {
+    background: linear-gradient(135deg, var(--lukasz-light), #d8e2ee);
+    border-left: 5px solid var(--lukasz);
+  }
+
+  .supp-card.joanna {
+    background: linear-gradient(135deg, var(--joanna-light), #eed3df);
+    border-left: 5px solid var(--joanna);
+  }
+
+  .supp-card h4 {
+    font-size: 18px;
+    margin: 0 0 14px 0;
+  }
+
+  .supp-card.lukasz h4 { color: var(--lukasz); }
+  .supp-card.joanna h4 { color: var(--joanna); }
+
+  .supp-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .supp-card td {
+    padding: 8px 0;
+    border-bottom: 1px dotted rgba(0,0,0,0.15);
+    vertical-align: top;
+  }
+
+  .supp-card td:first-child {
+    font-weight: 600;
+    width: 42%;
+    padding-right: 10px;
+  }
+
+  /* === CALLOUTS === */
+  .callout {
+    background: var(--accent-light);
+    border-left: 4px solid var(--accent);
+    padding: 16px 22px;
+    margin: 20px 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+  }
+
+  .callout.info {
+    background: #edf4fb;
+    border-left-color: var(--lukasz-2);
+  }
+
+  .callout h5 {
+    font-size: 14px;
+    margin: 0 0 8px 0;
+    color: #8a6014;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .callout.info h5 { color: var(--lukasz); }
+
+  .callout ul { margin: 0; padding-left: 22px; }
+  .callout li { margin-bottom: 4px; }
+
+  /* === RULES === */
+  .rules {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .rule-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 13px;
+  }
+
+  .rule-item strong {
+    color: var(--lukasz);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+  }
+
+  /* === FOOTER === */
+  footer {
+    background: #1a1f2e;
+    color: #aab;
+    padding: 40px 20px;
+    margin-top: 60px;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  footer em {
+    display: block;
+    margin-top: 10px;
+    color: #889;
+    font-size: 12px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 640px) {
+    .hero { padding: 50px 20px 40px; }
+    .hero .kicker { font-size: 11px; letter-spacing: 2px; }
+    section { padding: 40px 0 10px; }
+    section h2 { font-size: 24px; }
+    h3.subsection { font-size: 18px; }
+    .person-header { padding: 18px 20px; }
+    .person-header .avatar { width: 44px; height: 44px; font-size: 20px; }
+    .person-header h3 { font-size: 20px; }
+    .recipe { padding: 18px 20px; }
+    .recipe-header h4 { font-size: 17px; }
+    .nav { padding: 8px 10px; }
+    .nav a { font-size: 12px; padding: 5px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Plan Żywieniowy · 14 dni</div>
+    <h1>Dieta dla dwojga</h1>
+    <div class="subtitle">Redukcja &amp; budowa mięśni · gotowanie w multi cookerze · posiłki wymienne</div>
+
+    <div class="hero-people">
+      <div class="hero-person">
+        <div class="name">Lukasz</div>
+        <div class="stats">
+          38 lat · 125 kg · 190 cm<br>
+          Cel: redukcja ~1 kg/tydzień<br>
+          <strong>~2000 kcal · 180 g białka</strong>
+        </div>
+      </div>
+      <div class="hero-person">
+        <div class="name">Joanna</div>
+        <div class="stats">
+          37 lat · 55 kg · 170 cm<br>
+          Cel: budowa mięśni · okno 11–19<br>
+          <strong>~1950 kcal · 115 g białka</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#zasady">Zasady</a>
+    <a href="#rytm">Rytm dnia</a>
+    <a href="#sniadania">Śniadania</a>
+    <a href="#przekaski">Przekąski</a>
+    <a href="#popoludniowki">Popołudniówki</a>
+    <a href="#obiady">Obiady</a>
+    <a href="#plan">Plan 14 dni</a>
+    <a href="#receptury">Receptury</a>
+    <a href="#zakupy">Zakupy</a>
+    <a href="#suplementacja">Suplementacja</a>
+    <a href="#monitoring">Monitoring</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ============ ZASADY ============ -->
+<section id="zasady">
+  <h2>Jak korzystać z tego planu</h2>
+
+  <p>Plan opiera się na <strong>rotacji wymiennych posiłków</strong> — masz 5 opcji na każdy slot (śniadanie, przekąska, popołudniówka) i 10 obiadów. Oboje jecie to samo danie główne, różnią się tylko porcje. To eliminuje podwójne gotowanie.</p>
+
+  <h3 class="subsection">Zasady odczytu porcji</h3>
+
+  <div class="rules">
+    <div class="rule-item">
+      <strong>Mięso i ryby</strong>
+      Gramatura = surowe, przed obróbką termiczną.
+    </div>
+    <div class="rule-item">
+      <strong>Kasze / ryż / makaron</strong>
+      Podaję wagę <em>po ugotowaniu</em>. W nawiasie waga suchego produktu.
+    </div>
+    <div class="rule-item">
+      <strong>Jajka</strong>
+      Rozmiar L (~63 g bez skorupki). Jeśli masz M — użyj 3 zamiast 2.
+    </div>
+    <div class="rule-item">
+      <strong>Białko WPC</strong>
+      1 miarka = ~30 g proszku (~24 g czystego białka). Sprawdź opakowanie.
+    </div>
+    <div class="rule-item">
+      <strong>Chleb razowy</strong>
+      1 kromka ~40 g. Sprawdź swój bochenek — niektóre mają 50–60 g.
+    </div>
+    <div class="rule-item">
+      <strong>Warzywa</strong>
+      Gramatury orientacyjne — warzywa można jeść w większej ilości bez obaw.
+    </div>
+  </div>
+</section>
+
+<!-- ============ RYTM DNIA ============ -->
+<section id="rytm">
+  <h2>Rytm dnia</h2>
+
+  <div class="person-header lukasz">
+    <div class="avatar">L</div>
+    <div>
+      <h3>Lukasz</h3>
+      <div class="macros">~2000 kcal · B 180 g · W 180 g · T 65 g · 4 posiłki + opcjonalna przekąska wieczorna</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="plan-table">
+      <thead>
+        <tr><th>Godzina</th><th>Posiłek</th><th>Kalorie</th><th>Uwagi</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="day-cell">08:00</td><td>Śniadanie w domu</td><td>~520 kcal</td><td>Białkowe otwarcie dnia</td></tr>
+        <tr><td class="day-cell">09:00</td><td>Przekąska (zabierana)</td><td>~310 kcal</td><td>Zjadana ok. 9:00 w pracy</td></tr>
+        <tr><td class="day-cell">11:00–12:00</td><td>Lunch z pracy</td><td>~600 kcal</td><td>Stała pozycja — bez zmian</td></tr>
+        <tr><td class="day-cell">15:00–16:00</td><td>Popołudniówka</td><td>~370 kcal</td><td>Po niej koniec jedzenia do obiadu</td></tr>
+        <tr><td class="day-cell">18:00</td><td>Obiad w domu</td><td>~540 kcal</td><td>Główne źródło białka wieczorem</td></tr>
+        <tr class="weekend"><td class="day-cell">21:00</td><td>Opcjonalnie (jeśli głód)</td><td>~100 kcal</td><td>Twaróg 100 g lub skyr 150 g + cynamon</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout info">
+    <h5>Strategia przeciw nocnemu podjadaniu</h5>
+    <ul>
+      <li>Herbata ziołowa (rumianek, melisa) po obiedzie — sygnał końca dnia</li>
+      <li>Magnez cytrynian 400 mg na 1h przed snem — redukuje cravings</li>
+      <li>Jeśli napad głodu naprawdę uderza: twaróg lub skyr, NIE węglowodany</li>
+      <li>Babka jajowata 5 g + 300 ml wody 15 min przed obiadem = sycenie</li>
+    </ul>
+  </div>
+
+  <div class="person-header joanna">
+    <div class="avatar">J</div>
+    <div>
+      <h3>Joanna</h3>
+      <div class="macros">~1950 kcal · B 115 g · W 230 g · T 55 g · okno 11–19, trening 19–20</div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="plan-table">
+      <thead>
+        <tr><th>Godzina</th><th>Posiłek</th><th>Kalorie</th><th>Uwagi</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="day-cell">przed 11:00</td><td>Tylko woda, kawa bez cukru</td><td>0 kcal</td><td>Okno jeszcze zamknięte</td></tr>
+        <tr><td class="day-cell">11:00–12:00</td><td>Otwarcie okna + przekąska z pracy</td><td>~430 kcal</td><td>Przekąska przygotowana rano, lunch z pracy</td></tr>
+        <tr><td class="day-cell">12:00</td><td>Lunch z pracy</td><td>~550 kcal</td><td>Stała pozycja — bez zmian</td></tr>
+        <tr><td class="day-cell">15:00–16:00</td><td>Popołudniówka</td><td>~370 kcal</td><td>Miejsce na „deser"</td></tr>
+        <tr><td class="day-cell">17:30</td><td>Kolacja przed treningiem</td><td>~600 kcal</td><td>Więcej węgli — paliwo na trening</td></tr>
+        <tr><td class="day-cell">19:00–20:00</td><td>Trening</td><td>—</td><td>Woda + elektrolity</td></tr>
+        <tr><td class="day-cell">po 20:00</td><td>Okno zamknięte</td><td>—</td><td>Tylko woda, herbata bez kcal</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ ŚNIADANIA ============ -->
+<section id="sniadania">
+  <h2>Śniadania Lukasza</h2>
+  <p>5 opcji do swobodnej rotacji. Wszystkie ~450–580 kcal, wysoko białkowe. Joanna w tym czasie ma zamknięte okno.</p>
+
+  <div class="meal-grid">
+    <div class="meal-card">
+      <div class="card-title">1 · Jajecznica z twarogiem</div>
+      <div class="ingredients">
+        <ul>
+          <li>Jajka L — 3 szt</li>
+          <li>Twaróg chudy — 100 g</li>
+          <li>Masło — 5 g</li>
+          <li>Chleb razowy — 1 kromka (40 g)</li>
+          <li>Pomidor lub ogórek — 150 g</li>
+        </ul>
+      </div>
+      <div class="macro-footer">
+        <span>B 45 · W 25 · T 25</span>
+        <span class="kcal">~520 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">2 · Owsianka orzechowa</div>
+      <div class="ingredients">
+        <ul>
+          <li>Płatki owsiane — 60 g</li>
+          <li>Mleko 1,5% — 250 ml</li>
+          <li>Orzechy włoskie — 25 g</li>
+          <li>Jagody (mogą być mrożone) — 100 g</li>
+          <li>Białko WPC — 20 g (½ miarki)</li>
+        </ul>
+      </div>
+      <div class="macro-footer">
+        <span>B 40 · W 60 · T 20</span>
+        <span class="kcal">~580 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">3 · Omlet z szynką</div>
+      <div class="ingredients">
+        <ul>
+          <li>Jajka L — 3 szt</li>
+          <li>Szynka drobiowa — 60 g</li>
+          <li>Szpinak świeży — 50 g</li>
+          <li>Chleb razowy — 1 kromka (40 g)</li>
+          <li>Olej — 5 g</li>
+        </ul>
+      </div>
+      <div class="macro-footer">
+        <span>B 42 · W 22 · T 24</span>
+        <span class="kcal">~490 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">4 · Skyr na słodko</div>
+      <div class="ingredients">
+        <ul>
+          <li>Skyr naturalny — 300 g</li>
+          <li>Orzechy nerkowca — 30 g</li>
+          <li>Banan — 1 szt (120 g)</li>
+          <li>Miód — 10 g (łyżeczka)</li>
+        </ul>
+      </div>
+      <div class="macro-footer">
+        <span>B 40 · W 50 · T 18</span>
+        <span class="kcal">~530 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">5 · Kanapki białkowe</div>
+      <div class="ingredients">
+        <ul>
+          <li>Chleb razowy — 2 kromki (80 g)</li>
+          <li>Wędlina drobiowa — 80 g</li>
+          <li>Twarożek chudy — 80 g</li>
+          <li>Papryka / ogórek — 150 g</li>
+          <li>Masło — 5 g</li>
+        </ul>
+      </div>
+      <div class="macro-footer">
+        <span>B 45 · W 50 · T 12</span>
+        <span class="kcal">~510 kcal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRZEKĄSKI 9:00 ============ -->
+<section id="przekaski">
+  <h2>Przekąski 9:00 (oboje)</h2>
+  <p>Przygotowane rano, zabierane do pracy. <strong>Lukasz</strong> je o 9:00, <strong>Joanna</strong> dopiero o 11:00 (otwarcie okna) razem z lunchem z pracy. Różnią się jedynie porcją.</p>
+
+  <div class="meal-grid">
+    <div class="meal-card">
+      <div class="card-title">1 · Skyr + orzechy + owoc</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Skyr 200 g · orzechy 20 g · jabłko 180 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Skyr 250 g · orzechy 25 g · jagody 100 g · miód 10 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~320 kcal</span>
+        <span class="kcal joanna">J: ~420 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">2 · Jajka + warzywa + orzechy</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Jajka 2 L · marchew 100 g · papryka 100 g · migdały 20 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Jajka 2 L · warzywa 200 g · migdały 25 g · chleb razowy 1 kromka</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~280 kcal</span>
+        <span class="kcal joanna">J: ~430 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">3 · Kanapka białkowa</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Razowy 1 kromka · twarożek 60 g · wędlina drobiowa 50 g · pomidor 100 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Razowy 2 kromki · twarożek 80 g · wędlina 60 g · warzywa 150 g · masło 5 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~290 kcal</span>
+        <span class="kcal joanna">J: ~460 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">4 · Wrap z kurczakiem</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Tortilla · kurczak z obiadu 80 g · hummus 30 g · warzywa 100 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Tortilla · kurczak 100 g · hummus 30 g · warzywa 150 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~370 kcal</span>
+        <span class="kcal joanna">J: ~440 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">5 · Twaróg z orzechami</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Twaróg półtłusty 150 g · orzechy 20 g · jabłko 180 g · miód 5 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Twaróg 200 g · orzechy 20 g · jabłko/gruszka 180 g · miód 10 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~340 kcal</span>
+        <span class="kcal joanna">J: ~430 kcal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ POPOŁUDNIÓWKI ============ -->
+<section id="popoludniowki">
+  <h2>Popołudniówki 15:00–16:00</h2>
+  <p>Moment kluczowy dla Joanny (źródło „deseru") i Lukasza (domknięcie dnia przed obiadem). Opcja 3 z czekoladą to celowo wbudowany <em>legalny słodki moment</em> — 2–3 razy w tygodniu.</p>
+
+  <div class="meal-grid">
+    <div class="meal-card">
+      <div class="card-title">1 · Shake białkowy</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>WPC 30 g · mleko 1,5% 250 ml · banan 120 g · masło orzechowe 15 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>WPC 25 g · mleko 200 ml · banan 120 g · masło orzechowe 15 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~420 kcal</span>
+        <span class="kcal joanna">J: ~370 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">2 · Serek wiejski z warzywami</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Serek wiejski 200 g · orzechy 20 g · pomidorki 150 g · pestki dyni 10 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Serek wiejski 200 g · orzechy 20 g · pomidorki 150 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~330 kcal</span>
+        <span class="kcal joanna">J: ~290 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">3 · „Deser" czekoladowy</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Skyr 150 g · czekolada 85% 20 g · orzechy 25 g · jabłko 180 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Skyr 200 g · czekolada 85% 20 g · orzechy 20 g · jagody 80 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~420 kcal</span>
+        <span class="kcal joanna">J: ~400 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">4 · Tost z awokado + jajko</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Razowy 1 kromka · awokado 80 g · jajko 1 L · pomidor 100 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Razowy 1 kromka · awokado 80 g · jajko 1 L · pomidor 100 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~330 kcal</span>
+        <span class="kcal joanna">J: ~330 kcal</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">5 · Koktajl / owsianka brownie</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz — koktajl:</span>
+        <ul><li>Skyr 200 g · jagody mrożone 100 g · WPC 20 g · orzechy 15 g</li></ul>
+        <span class="person-tag joanna">Joanna — owsianka:</span>
+        <ul><li>Płatki 40 g · mleko 200 ml · kakao 10 g · banan · WPC 20 g · orzechy 15 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~360 kcal</span>
+        <span class="kcal joanna">J: ~450 kcal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OBIADY ============ -->
+<section id="obiady">
+  <h2>10 dań obiadowych</h2>
+  <p>Jedno gotowanie, dwie porcje. Pełne receptury krok po kroku w sekcji <a href="#receptury" style="color:var(--lukasz-2)">Receptury</a>.</p>
+
+  <div class="meal-grid">
+    <div class="meal-card">
+      <div class="card-title">1 · Rosół drobiowy z makaronem</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Mięso z udek 150 g · warzywa 200 g · makaron 100 g · bulion 400 ml · natka</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Mięso 120 g · warzywa 150 g · makaron 150 g · bulion 400 ml</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~480 kcal · B40/W45/T14</span>
+        <span class="kcal joanna">J: ~500 · B35/W55/T12</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">2 · Kurczak curry z ryżem</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Pierś 200 g · ryż ugot. 120 g · warzywa 250 g · mleczko kokosowe light 80 ml</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Pierś 150 g · ryż 180 g · warzywa 200 g · mleczko 80 ml</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~580 · B50/W50/T18</span>
+        <span class="kcal joanna">J: ~620 · B42/W75/T15</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">3 · Łosoś + bataty + brokuły</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Łosoś 180 g · bataty pieczone 180 g · brokuły 200 g · oliwa 5 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Łosoś 150 g · bataty 250 g · brokuły 200 g · oliwa 5 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~560 · B40/W40/T22</span>
+        <span class="kcal joanna">J: ~580 · B35/W55/T22</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">4 · Chili con carne</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Wołowina mielona 150 g · fasola 100 g · pomidory 150 g · papryka 100 g · ryż 80 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Wołowina 120 g · fasola 100 g · pomidory 150 g · papryka 100 g · ryż 150 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~540 · B45/W55/T15</span>
+        <span class="kcal joanna">J: ~600 · B38/W75/T14</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">5 · Kotlety z indyka + gryka</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Indyk mielony 180 g (2 kotlety) · gryka ugot. 120 g · surówka 200 g · oliwa 5 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Indyk 150 g (2 kotlety) · gryka 180 g · surówka 200 g · oliwa 5 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~520 · B48/W45/T15</span>
+        <span class="kcal joanna">J: ~580 · B40/W65/T15</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">6 · Schab duszony z ziemniakami</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Schab 160 g · ziemniaki 200 g · warzywa duszone 250 g · olej 5 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Schab 130 g · ziemniaki 300 g · warzywa 200 g · olej 5 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~540 · B42/W45/T18</span>
+        <span class="kcal joanna">J: ~580 · B35/W65/T17</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">7 · Gulasz wołowy + pęczak</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Wołowina 150 g · kasza pęczak ugot. 120 g · warzywa 200 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Wołowina 120 g · kasza 180 g · warzywa 200 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~520 · B42/W45/T16</span>
+        <span class="kcal joanna">J: ~580 · B35/W65/T15</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">8 · Kurczak + warzywa korzeniowe + tzatziki</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Pierś 200 g · warzywa pieczone 250 g · tzatziki 100 g · oliwa 5 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Pierś 150 g · warzywa 250 g · tzatziki 120 g · ryż 150 g · oliwa 5 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~520 · B50/W35/T16</span>
+        <span class="kcal joanna">J: ~590 · B42/W65/T16</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">9 · Makaron z kurczakiem i szpinakiem</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Makaron pełnoziar. 120 g · kurczak 150 g · szpinak 150 g · śmietana 12% 60 g · parmezan 15 g</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Makaron 180 g · kurczak 130 g · szpinak 150 g · śmietana 60 g · parmezan 15 g</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~580 · B50/W50/T20</span>
+        <span class="kcal joanna">J: ~640 · B42/W70/T18</span>
+      </div>
+    </div>
+
+    <div class="meal-card">
+      <div class="card-title">10 · Krem z soczewicy + jajko</div>
+      <div class="ingredients">
+        <span class="person-tag lukasz">Lukasz:</span>
+        <ul><li>Soczewica sucha 80 g · warzywa 200 g · jajka 2 L · pestki dyni 15 g · razowy 1 kromka</li></ul>
+        <span class="person-tag joanna">Joanna:</span>
+        <ul><li>Soczewica 80 g · warzywa 200 g · jajka 2 L · pestki 15 g · razowy 2 kromki</li></ul>
+      </div>
+      <div class="macro-footer">
+        <span>L: ~560 · B40/W55/T18</span>
+        <span class="kcal joanna">J: ~620 · B38/W75/T18</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLAN 14 DNI ============ -->
+<section id="plan">
+  <h2>Plan 14 dni</h2>
+  <p>Przykładowa rotacja. Śniadania Lukasza i przekąski/popołudniówki (oboje) możesz swobodnie wymieniać między opcjami 1–5. Obiady są kluczowe — tydzień = 7 różnych dań.</p>
+
+  <h3 class="subsection">Tydzień 1</h3>
+  <div class="table-wrap">
+    <table class="plan-table">
+      <thead>
+        <tr>
+          <th>Dzień</th>
+          <th>Śniadanie L</th>
+          <th>Przekąska 9:00</th>
+          <th>Popołudniówka</th>
+          <th>Obiad 18:00</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="day-cell">Pon</td><td>Jajecznica</td><td>Skyr + orzechy</td><td>Shake</td><td>Kurczak curry</td></tr>
+        <tr><td class="day-cell">Wt</td><td>Owsianka</td><td>Jajka + warzywa</td><td>Serek wiejski</td><td>Kotlety z indyka</td></tr>
+        <tr><td class="day-cell">Śr</td><td>Omlet z szynką</td><td>Kanapka białkowa</td><td>Deser czekoladowy</td><td>Łosoś + bataty</td></tr>
+        <tr><td class="day-cell">Czw</td><td>Skyr na słodko</td><td>Wrap z kurczakiem*</td><td>Tost z awokado</td><td>Chili con carne</td></tr>
+        <tr><td class="day-cell">Pt</td><td>Kanapki białkowe</td><td>Twaróg + orzechy</td><td>Shake</td><td>Gulasz + pęczak</td></tr>
+        <tr class="weekend"><td class="day-cell">Sob</td><td>Jajecznica</td><td>—</td><td>Owsianka brownie / deser</td><td>Rosół drobiowy</td></tr>
+        <tr class="weekend"><td class="day-cell">Nd</td><td>Owsianka</td><td>—</td><td>Serek wiejski</td><td>Makaron z kurczakiem</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size: 12px; color: var(--muted); font-style: italic;">* wrap wymaga kurczaka z wcześniejszego obiadu — zaplanowany po dniu z curry/kurczakiem</p>
+
+  <h3 class="subsection">Tydzień 2</h3>
+  <div class="table-wrap">
+    <table class="plan-table">
+      <thead>
+        <tr>
+          <th>Dzień</th>
+          <th>Śniadanie L</th>
+          <th>Przekąska 9:00</th>
+          <th>Popołudniówka</th>
+          <th>Obiad 18:00</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="day-cell">Pon</td><td>Omlet z szynką</td><td>Skyr + orzechy</td><td>Deser czekoladowy</td><td>Schab z ziemniakami</td></tr>
+        <tr><td class="day-cell">Wt</td><td>Owsianka</td><td>Jajka + warzywa</td><td>Shake</td><td>Kurczak + warzywa korzeniowe</td></tr>
+        <tr><td class="day-cell">Śr</td><td>Skyr na słodko</td><td>Kanapka białkowa</td><td>Serek wiejski</td><td>Krem z soczewicy</td></tr>
+        <tr><td class="day-cell">Czw</td><td>Kanapki białkowe</td><td>Wrap z kurczakiem*</td><td>Tost z awokado</td><td>Chili con carne</td></tr>
+        <tr><td class="day-cell">Pt</td><td>Jajecznica</td><td>Twaróg + orzechy</td><td>Shake</td><td>Kotlety z indyka</td></tr>
+        <tr class="weekend"><td class="day-cell">Sob</td><td>Omlet z szynką</td><td>—</td><td>Owsianka brownie / deser</td><td>Łosoś + bataty</td></tr>
+        <tr class="weekend"><td class="day-cell">Nd</td><td>Owsianka</td><td>—</td><td>Deser czekoladowy</td><td>Gulasz + pęczak</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <h5>Przepływ meal prep</h5>
+    <ul>
+      <li><strong>Sobota 10:00–12:30</strong> — gotowanie na pon/wt (obiad dnia + lunch-wraps jeśli w planie)</li>
+      <li><strong>Środa wieczór 17:00</strong> — 30 min na gotowanie na czw/pt</li>
+      <li><strong>Niedziela</strong> — świeży obiad + mycie i krojenie warzyw na cały tydzień</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ RECEPTURY ============ -->
+<section id="receptury">
+  <h2>Receptury krok po kroku</h2>
+  <p>Wszystkie receptury zoptymalizowane pod multi cooker (pressure cooker / air fryer / steamer). Czasy to „czas pracy" + „czas gotowania bezobsługowo".</p>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>1 · Rosół drobiowy z makaronem</h4>
+      <span class="recipe-num">15 min pracy · 30 min PC</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Mięso z udek: 150 g</li>
+          <li>Marchew/pietruszka/seler: 200 g</li>
+          <li>Makaron ugotowany: 100 g</li>
+          <li>Bulion: 400 ml</li>
+          <li>Natka pietruszki</li>
+          <li class="macro-line">~480 kcal · B40 · W45 · T14</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Mięso z udek: 120 g</li>
+          <li>Warzywa: 150 g</li>
+          <li>Makaron ugotowany: 150 g</li>
+          <li>Bulion: 400 ml</li>
+          <li class="macro-line">~500 kcal · B35 · W55 · T12</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Do pressure cookera wrzuć 4 udka kurczaka (skóra zostaje), 1 cebulę, 2 marchewki, 1 pietruszkę, kawałek selera, 2 listki laurowe, 4 ziela angielskie, łyżeczkę soli, 1,8 l wody.</li>
+        <li>Pressure cook 30 min, naturalne rozprężenie 10 min.</li>
+        <li>Wyjmij mięso, odkrój od kości, podziel wagowo. Warzywa również podziel wagowo.</li>
+        <li>Makaron gotuj osobno w drugim garnku (7 min).</li>
+        <li>Składaj na talerzu: bulion → makaron → mięso → warzywa → natka.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>2 · Kurczak curry z ryżem</h4>
+      <span class="recipe-num">10 min pracy · 15 min PC</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Pierś z kurczaka: 200 g</li>
+          <li>Ryż ugotowany: 120 g</li>
+          <li>Papryka / cukinia / marchew: 250 g</li>
+          <li>Mleczko kokosowe light: 80 ml</li>
+          <li>Olej: 5 g</li>
+          <li class="macro-line">~580 kcal · B50 · W50 · T18</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Pierś z kurczaka: 150 g</li>
+          <li>Ryż ugotowany: 180 g</li>
+          <li>Warzywa: 200 g</li>
+          <li>Mleczko kokosowe light: 80 ml</li>
+          <li class="macro-line">~620 kcal · B42 · W75 · T15</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Pierś pokrój w kostkę 2 cm. Obsmaż na sauté w pressure cookerze (5 min, olej).</li>
+        <li>Dodaj pokrojone warzywa, 2 łyżki pasty curry (lub 1 łyżka curry w proszku), mleczko kokosowe, 100 ml wody.</li>
+        <li>Pressure cook 8 min, szybkie rozprężenie.</li>
+        <li>Ryż ugotuj osobno (lub w osobnej wkładce multi cookera).</li>
+        <li>Podziel wagowo. Joanna dostaje mniej kurczaka, więcej ryżu.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>3 · Łosoś z batatami i brokułami</h4>
+      <span class="recipe-num">10 min pracy · 25 min piekarnik/AF</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Łosoś (filet): 180 g</li>
+          <li>Bataty pieczone: 180 g</li>
+          <li>Brokuły: 200 g</li>
+          <li>Oliwa: 5 g</li>
+          <li class="macro-line">~560 kcal · B40 · W40 · T22</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Łosoś: 150 g</li>
+          <li>Bataty pieczone: 250 g</li>
+          <li>Brokuły: 200 g</li>
+          <li>Oliwa: 5 g</li>
+          <li class="macro-line">~580 kcal · B35 · W55 · T22</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Bataty pokrój w kostki 2 cm, wymieszaj z oliwą, solą, papryką słodką.</li>
+        <li>Air fryer 200 °C / 18 min, potrząśnij w połowie.</li>
+        <li>Łosoś natrzyj solą, pieprzem, skropij cytryną. Wrzuć do AF na ostatnie 10 min obok batatów (lub w drugi koszyk).</li>
+        <li>Brokuły ugotuj w steamerze 6 min.</li>
+        <li>Wagowe porcje — łosoś Lukasza 180 g, Joanny 150 g.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>4 · Chili con carne</h4>
+      <span class="recipe-num">10 min pracy · 20 min PC</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Wołowina mielona: 150 g</li>
+          <li>Fasola czerwona z puszki: 100 g</li>
+          <li>Pomidory krojone: 150 g</li>
+          <li>Papryka: 100 g · cebula: 50 g</li>
+          <li>Ryż ugotowany: 80 g</li>
+          <li class="macro-line">~540 kcal · B45 · W55 · T15</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Wołowina mielona: 120 g</li>
+          <li>Fasola: 100 g</li>
+          <li>Pomidory: 150 g</li>
+          <li>Papryka 100 g · cebula 50 g</li>
+          <li>Ryż ugotowany: 150 g</li>
+          <li class="macro-line">~600 kcal · B38 · W75 · T14</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Sauté: cebula, papryka, wołowina mielona — 6 min, aż mięso zbrązowieje.</li>
+        <li>Dodaj pomidory krojone, 1 łyżeczkę mielonego kminu, 1 łyżeczkę papryki wędzonej, ½ łyżeczki chili (do smaku), sól.</li>
+        <li>Pressure cook 15 min. Następnie dodaj odsączoną fasolę, wymieszaj, pozostaw na „keep warm" 5 min.</li>
+        <li>Ryż osobno. Składaj wagowo.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>5 · Kotlety z indyka + kasza gryczana + surówka</h4>
+      <span class="recipe-num">15 min pracy · 12 min AF</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Indyk mielony: 180 g (= 2 kotlety)</li>
+          <li>Kasza gryczana ugot.: 120 g</li>
+          <li>Surówka z kapusty i marchwi: 200 g</li>
+          <li>Oliwa do surówki: 5 g</li>
+          <li class="macro-line">~520 kcal · B48 · W45 · T15</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Indyk mielony: 150 g (= 2 kotlety)</li>
+          <li>Kasza gryczana: 180 g</li>
+          <li>Surówka: 200 g</li>
+          <li>Oliwa: 5 g</li>
+          <li class="macro-line">~580 kcal · B40 · W65 · T15</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Wymieszaj mielony indyk (na cały garnek 600 g) z 1 jajkiem, 2 łyżkami bułki tartej pełnoziarnistej, drobno posiekaną cebulą, solą, pieprzem, majerankiem.</li>
+        <li>Formuj kotlety ~75 g (waga surowa) — wyjdzie ok. 8 sztuk na 2 osoby na 2 dni.</li>
+        <li>Air fryer 180 °C / 12 min, obracanie w połowie.</li>
+        <li>Kasza w multi cookerze — stosunek 1:2 z wodą, 12 min.</li>
+        <li>Surówka: biała kapusta + marchew + cebula + oliwa + cytryna + sól.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>6 · Schab duszony z warzywami + ziemniaki</h4>
+      <span class="recipe-num">15 min pracy · 25 min PC</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Schab: 160 g</li>
+          <li>Ziemniaki gotowane: 200 g</li>
+          <li>Papryka/cukinia/cebula: 250 g</li>
+          <li>Olej: 5 g</li>
+          <li class="macro-line">~540 kcal · B42 · W45 · T18</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Schab: 130 g</li>
+          <li>Ziemniaki: 300 g</li>
+          <li>Warzywa: 200 g</li>
+          <li>Olej: 5 g</li>
+          <li class="macro-line">~580 kcal · B35 · W65 · T17</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Schab pokrój w kostkę 2 cm. Obsmaż na sauté 5 min (olej, sól, pieprz, majeranek).</li>
+        <li>Dodaj pokrojone warzywa, 150 ml bulionu, 1 łyżkę koncentratu pomidorowego.</li>
+        <li>Pressure cook 20 min, naturalne rozprężenie.</li>
+        <li>Ziemniaki w steamerze 15 min (lub w drugiej wkładce).</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>7 · Gulasz wołowy + kasza pęczak</h4>
+      <span class="recipe-num">15 min pracy · 45 min PC</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Wołowina (łopatka): 150 g</li>
+          <li>Kasza pęczak ugot.: 120 g</li>
+          <li>Warzywa z sosu: 200 g</li>
+          <li class="macro-line">~520 kcal · B42 · W45 · T16</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Wołowina: 120 g</li>
+          <li>Kasza pęczak: 180 g</li>
+          <li>Warzywa: 200 g</li>
+          <li class="macro-line">~580 kcal · B35 · W65 · T15</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Wołowinę pokrój w kostkę, obsmaż w oleju (sauté, 6 min).</li>
+        <li>Dodaj cebulę, marchew, paprykę (razem 500 g na 2 osoby × 2 dni), 400 ml bulionu, 2 łyżki koncentratu pomidorowego, liść laurowy, ziele, paprykę słodką, majeranek.</li>
+        <li>Pressure cook 40 min, naturalne rozprężenie.</li>
+        <li>Kasza pęczak w multi cookerze: 1 część kaszy + 2,5 części wody, 25 min.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>8 · Kurczak z warzywami korzeniowymi + tzatziki</h4>
+      <span class="recipe-num">15 min pracy · 25 min AF</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Pierś z kurczaka: 200 g</li>
+          <li>Marchew/pietruszka/burak pieczone: 250 g</li>
+          <li>Tzatziki (jogurt grecki + ogórek + czosnek): 100 g</li>
+          <li>Oliwa: 5 g</li>
+          <li class="macro-line">~520 kcal · B50 · W35 · T16</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Pierś z kurczaka: 150 g</li>
+          <li>Warzywa pieczone: 250 g</li>
+          <li>Tzatziki: 120 g</li>
+          <li>Ryż ugot.: 150 g</li>
+          <li>Oliwa: 5 g</li>
+          <li class="macro-line">~590 kcal · B42 · W65 · T16</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Pierś natrzyj przyprawami (sól, papryka, czosnek granulowany, zioła prowansalskie), skropij oliwą.</li>
+        <li>Warzywa pokrój w słupki, wymieszaj z oliwą i solą.</li>
+        <li>Air fryer 190 °C / 25 min — warzywa wkładasz najpierw, pierś dodajesz po 10 min (piecze się 15 min).</li>
+        <li>Tzatziki: 300 g jogurtu greckiego + starty odciśnięty ogórek + 1 ząbek czosnku + koperek + sól.</li>
+        <li>Joanna dodatkowo ma ryż.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>9 · Makaron z kurczakiem i szpinakiem</h4>
+      <span class="recipe-num">15 min pracy · 10 min gotowania</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Makaron pełnoziarnisty ugot.: 120 g</li>
+          <li>Pierś z kurczaka: 150 g</li>
+          <li>Szpinak świeży: 150 g</li>
+          <li>Śmietana 12%: 60 g</li>
+          <li>Parmezan: 15 g</li>
+          <li class="macro-line">~580 kcal · B50 · W50 · T20</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Makaron: 180 g</li>
+          <li>Pierś: 130 g</li>
+          <li>Szpinak: 150 g</li>
+          <li>Śmietana 12%: 60 g</li>
+          <li>Parmezan: 15 g</li>
+          <li class="macro-line">~640 kcal · B42 · W70 · T18</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>Makaron ugotuj al dente zgodnie z instrukcją na opakowaniu.</li>
+        <li>Pierś pokrój w paski, podsmaż na patelni 6 min z czosnkiem.</li>
+        <li>Dodaj szpinak, smaż 2 min aż zwiędnie.</li>
+        <li>Wlej śmietanę, 2 łyżki wody z makaronu, dopraw solą i pieprzem.</li>
+        <li>Wymieszaj z makaronem, podaj z parmezanem.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="recipe">
+    <div class="recipe-header">
+      <h4>10 · Krem z soczewicy + jajko na twardo</h4>
+      <span class="recipe-num">10 min pracy · 15 min PC</span>
+    </div>
+    <div class="recipe-portions-grid">
+      <div class="recipe-portions lukasz">
+        <h5>Porcja — Lukasz</h5>
+        <ul>
+          <li>Soczewica czerwona sucha: 80 g</li>
+          <li>Warzywa (marchew, cebula, czosnek, pomidor): 200 g</li>
+          <li>Jajka na twardo: 2 szt L</li>
+          <li>Pestki dyni: 15 g</li>
+          <li>Chleb razowy: 1 kromka (40 g)</li>
+          <li class="macro-line">~560 kcal · B40 · W55 · T18</li>
+        </ul>
+      </div>
+      <div class="recipe-portions joanna">
+        <h5>Porcja — Joanna</h5>
+        <ul>
+          <li>Soczewica: 80 g</li>
+          <li>Warzywa: 200 g</li>
+          <li>Jajka: 2 szt L</li>
+          <li>Pestki: 15 g</li>
+          <li>Chleb razowy: 2 kromki (80 g)</li>
+          <li class="macro-line">~620 kcal · B38 · W75 · T18</li>
+        </ul>
+      </div>
+    </div>
+    <div class="recipe-steps">
+      <h5>Przygotowanie</h5>
+      <ol>
+        <li>W pressure cookerze: sauté cebula, marchew, czosnek (5 min).</li>
+        <li>Dodaj soczewicę (przepłukaną), pomidor, 700 ml bulionu warzywnego, kmin rzymski, curry, sól.</li>
+        <li>Pressure cook 10 min, naturalne rozprężenie.</li>
+        <li>Zblenduj na gładki krem. Jeśli za gęste — dolej wody.</li>
+        <li>Jajka ugotuj na twardo (steamer 12 min).</li>
+        <li>Podaj z jajkiem w połówkach, pestkami dyni i kromką razowego.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ZAKUPY ============ -->
+<section id="zakupy">
+  <h2>Lista zakupów na tydzień</h2>
+  <p>Ilości szacunkowe na 7 dni dla dwóch osób przy założeniu rotacji z tygodnia 1. Dostosuj do realnego menu, które wybierzesz.</p>
+
+  <div class="shopping-grid">
+    <div class="shopping-category">
+      <h5>🥩 Mięso &amp; ryby</h5>
+      <ul>
+        <li>Pierś z kurczaka — 1,2 kg</li>
+        <li>Udka z kurczaka (do rosołu) — 1 kg</li>
+        <li>Łosoś (filet) — 700 g</li>
+        <li>Wołowina mielona — 550 g</li>
+        <li>Wołowina (łopatka) — 550 g</li>
+        <li>Schab — 600 g</li>
+        <li>Indyk mielony — 700 g</li>
+        <li>Szynka drobiowa — 200 g</li>
+        <li>Wędlina drobiowa — 300 g</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🥛 Nabiał &amp; jaja</h5>
+      <ul>
+        <li>Jajka L — 30 szt</li>
+        <li>Mleko 1,5% — 2 l</li>
+        <li>Skyr naturalny — 1,2 kg</li>
+        <li>Jogurt grecki — 500 g</li>
+        <li>Twaróg chudy — 400 g</li>
+        <li>Twaróg półtłusty — 400 g</li>
+        <li>Twarożek chudy — 400 g</li>
+        <li>Serek wiejski — 400 g</li>
+        <li>Śmietana 12% — 200 g</li>
+        <li>Parmezan — 50 g</li>
+        <li>Masło — 100 g</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🥕 Warzywa</h5>
+      <ul>
+        <li>Marchew — 2 kg</li>
+        <li>Pietruszka korzeń — 500 g</li>
+        <li>Seler — 1 sztuka</li>
+        <li>Cebula — 1,5 kg</li>
+        <li>Czosnek — 2 główki</li>
+        <li>Papryka — 1 kg</li>
+        <li>Pomidory — 1 kg</li>
+        <li>Pomidorki koktajlowe — 500 g</li>
+        <li>Ogórek — 800 g</li>
+        <li>Cukinia — 2 sztuki</li>
+        <li>Szpinak świeży — 600 g</li>
+        <li>Brokuły — 1 kg</li>
+        <li>Bataty — 1,5 kg</li>
+        <li>Ziemniaki — 2 kg</li>
+        <li>Burak — 3 sztuki</li>
+        <li>Kapusta biała — ½ główki</li>
+        <li>Sałata — 1 sztuka</li>
+        <li>Awokado — 2 sztuki</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🍎 Owoce</h5>
+      <ul>
+        <li>Jabłka — 10 sztuk</li>
+        <li>Banany — 8 sztuk</li>
+        <li>Jagody świeże/mrożone — 600 g</li>
+        <li>Cytryny — 2 sztuki</li>
+        <li>Gruszki — 3 sztuki</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🌾 Zboża, kasze, pieczywo</h5>
+      <ul>
+        <li>Chleb razowy — 2 bochenki</li>
+        <li>Płatki owsiane — 500 g</li>
+        <li>Ryż (brązowy lub basmati) — 500 g</li>
+        <li>Makaron pełnoziarnisty — 500 g</li>
+        <li>Kasza gryczana — 400 g</li>
+        <li>Kasza pęczak — 400 g</li>
+        <li>Soczewica czerwona — 250 g</li>
+        <li>Tortille pełnoziarniste — 6 sztuk</li>
+        <li>Bułka tarta pełnoziarnista — 100 g</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🥜 Orzechy, nasiona, tłuszcze</h5>
+      <ul>
+        <li>Orzechy włoskie — 300 g</li>
+        <li>Nerkowce — 150 g</li>
+        <li>Migdały — 150 g</li>
+        <li>Pestki dyni — 100 g</li>
+        <li>Masło orzechowe 100% — 1 słoik</li>
+        <li>Oliwa z oliwek — butelka</li>
+        <li>Olej rzepakowy — butelka</li>
+        <li>Hummus — 300 g</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🥫 Puszki, konserwy, inne</h5>
+      <ul>
+        <li>Pomidory krojone — 2 puszki</li>
+        <li>Fasola czerwona — 2 puszki</li>
+        <li>Mleczko kokosowe light — 1 puszka</li>
+        <li>Koncentrat pomidorowy — 1 słoiczek</li>
+        <li>Miód — 1 słoik</li>
+        <li>Czekolada gorzka 85% — 2 tabliczki</li>
+        <li>Kakao — 1 opakowanie</li>
+      </ul>
+    </div>
+
+    <div class="shopping-category">
+      <h5>🧂 Przyprawy (na zapas)</h5>
+      <ul>
+        <li>Sól, pieprz</li>
+        <li>Papryka słodka i wędzona</li>
+        <li>Curry w proszku lub pasta</li>
+        <li>Kmin rzymski mielony</li>
+        <li>Chili</li>
+        <li>Majeranek</li>
+        <li>Zioła prowansalskie</li>
+        <li>Listek laurowy, ziele angielskie</li>
+        <li>Czosnek granulowany</li>
+        <li>Cynamon</li>
+        <li>Koperek</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUPLEMENTACJA ============ -->
+<section id="suplementacja">
+  <h2>Suplementacja</h2>
+  <p>Propozycja konserwatywna — tylko to, co ma udokumentowane działanie i sens w waszym kontekście. Zawsze sprawdzaj etykiety swoich suplementów, dawki mogą się różnić.</p>
+
+  <div class="supp-grid">
+    <div class="supp-card lukasz">
+      <h4>Lukasz — dziennie</h4>
+      <table>
+        <tr><td>Witamina D3</td><td>4000 IU z posiłkiem tłuszczowym</td></tr>
+        <tr><td>Omega-3</td><td>2 kapsułki, min. 1000 mg EPA+DHA</td></tr>
+        <tr><td>Magnez cytrynian</td><td>400 mg, 1h przed snem</td></tr>
+        <tr><td>Białko WPC</td><td>1 porcja/dzień (30 g)</td></tr>
+        <tr><td>Babka jajowata</td><td>1 łyżka (5 g) + 300 ml wody, 15 min przed obiadem</td></tr>
+      </table>
+    </div>
+
+    <div class="supp-card joanna">
+      <h4>Joanna — dziennie</h4>
+      <table>
+        <tr><td>Witamina D3</td><td>3000 IU z posiłkiem tłuszczowym</td></tr>
+        <tr><td>Omega-3</td><td>2 kapsułki, 1000 mg EPA+DHA</td></tr>
+        <tr><td>Magnez cytrynian</td><td>300 mg, 1h przed snem</td></tr>
+        <tr><td>Białko WPC</td><td>1 porcja/dzień (25 g)</td></tr>
+        <tr><td>Kreatyna monohydrat</td><td>5 g codziennie, stała pora</td></tr>
+        <tr><td>Żelazo</td><td>Tylko po badaniu ferrytyny</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h5>Uwagi do suplementacji</h5>
+    <ul>
+      <li>Przed rozpoczęciem warto zbadać: 25(OH)D3, ferrytynę (Joanna), TSH, morfologię, lipidogram.</li>
+      <li>Kreatyna — w pierwszym tygodniu można zrobić fazę nasycenia (4 × 5 g dziennie przez 5–7 dni), ale nie jest obowiązkowa.</li>
+      <li>Omega-3 — wybieraj preparaty z certyfikatem IFOS lub z podaną zawartością EPA+DHA na kapsułkę.</li>
+      <li>Babka jajowata — zaczynaj od ½ łyżki, zwiększaj stopniowo. Pij dużo wody.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ MONITORING ============ -->
+<section id="monitoring">
+  <h2>Monitoring &amp; zasady</h2>
+
+  <h3 class="subsection">Nawodnienie i napoje</h3>
+  <div class="rules">
+    <div class="rule-item"><strong>Woda Lukasz</strong>~3 l dziennie. Butelka 1 l na biurku, uzupełnij 3 razy.</div>
+    <div class="rule-item"><strong>Woda Joanna</strong>~2,5 l dziennie, w tym 500 ml przed + 500 ml w trakcie treningu.</div>
+    <div class="rule-item"><strong>Kawa</strong>Bez cukru i syropów. Mleko 1,5% OK. 2–3 filiżanki/dzień.</div>
+    <div class="rule-item"><strong>Alkohol</strong>Weekendowo maks. 2 jednostki. Liczyć do bilansu kalorycznego.</div>
+    <div class="rule-item"><strong>Herbata wieczorna</strong>Ziołowa (rumianek, melisa) — sygnał „koniec jedzenia".</div>
+    <div class="rule-item"><strong>Elektrolity po treningu</strong>Joanna: szczypta soli + cytryna + 500 ml wody.</div>
+  </div>
+
+  <h3 class="subsection">Co mierzyć</h3>
+  <div class="table-wrap">
+    <table class="plan-table">
+      <thead>
+        <tr><th>Co</th><th>Kiedy</th><th>Uwagi</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="day-cell">Waga</td><td>Codziennie rano, po toalecie</td><td>Liczy się średnia tygodniowa, nie pojedyncze wahania</td></tr>
+        <tr><td class="day-cell">Obwody</td><td>Co 2 tygodnie</td><td>Pas, biodra, udo, klatka — zwłaszcza dla Joanny (budowa)</td></tr>
+        <tr><td class="day-cell">Zdjęcia</td><td>Co 2 tygodnie</td><td>To samo światło, pozycja, godzina — widać więcej niż na wadze</td></tr>
+        <tr><td class="day-cell">Samopoczucie, sen</td><td>Na bieżąco</td><td>Spadek energii = sygnał do przeglądu planu</td></tr>
+        <tr><td class="day-cell">Napady głodu (Lukasz)</td><td>Zapisuj każdy</td><td>Po 2 tyg. widać czy strategia działa</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="subsection">Kiedy modyfikować plan</h3>
+
+  <div class="callout info">
+    <h5>Lukasz</h5>
+    <ul>
+      <li><strong>Strata &gt; 1,2 kg/tydzień przez 2 tyg.</strong> → dodaj 150 kcal (np. 30 g orzechów) — za szybko, ryzyko utraty mięśni</li>
+      <li><strong>Strata &lt; 0,5 kg/tydzień przez 2 tyg.</strong> → zmniejsz o 150 kcal lub dodaj 30 min spaceru dziennie</li>
+      <li><strong>Napady głodu nie ustępują po 3 tyg.</strong> → przesuń więcej białka na obiad, zwiększ błonnik</li>
+    </ul>
+  </div>
+
+  <div class="callout info">
+    <h5>Joanna</h5>
+    <ul>
+      <li><strong>Waga rośnie szybciej niż 300 g/tydzień</strong> → obniż o 100 kcal (mniej ryżu/makaronu na kolację)</li>
+      <li><strong>Waga spada</strong> (nie tego chcemy przy budowie) → dodaj 150 kcal do kolacji lub popołudniówki</li>
+      <li><strong>Słaba siła na treningu</strong> → zwiększ węgle do kolacji przedtreningowej o 50 g ryżu/makaronu</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  Plan opracowany indywidualnie dla Lukasza i Joanny · Rotacja 14 dni · Kwiecień 2026
+  <em>Dokument należy traktować jako propozycję żywieniową, nie zalecenie medyczne. W razie chorób, leków lub wątpliwości skonsultuj plan z lekarzem lub dietetykiem.</em>
+</footer>
+
+</body>
+</html>
